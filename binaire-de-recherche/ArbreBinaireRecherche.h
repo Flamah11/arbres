@@ -11,8 +11,10 @@ class ArbreBinaireRecherche {
     ArbreBinaireRecherche();
     bool estVide();
     void inserer(Type valeur);
-    void insererNoeude(Noeud<Type> noeud, Type valeur);
+    void insererNoeud(Noeud<Type>* noeud, Type valeur);
 };
+
+#endif
 
 template <typename Type>
 ArbreBinaireRecherche<Type>::ArbreBinaireRecherche() {
@@ -29,12 +31,12 @@ void ArbreBinaireRecherche<Type>::inserer(Type valeur) {
   if (this->estVide()) {
     this->racine = new Noeud<Type>(valeur);
   } else {
-    insererNoeude(this->racine, valeur);
+    insererNoeud(this->racine, valeur);
   }
 }
 
 template <typename Type>
-void ArbreBinaireRecherche<Type>::insererNoeude(Noeud<Type> noeud, Type valeur) {
+void ArbreBinaireRecherche<Type>::insererNoeud(Noeud<Type>* noeud, Type valeur) {
   if (valeur < noeud->cle) {
     if (noeud->aFilsGauche()) {      
       insererNoeud(noeud->filsGauche, valeur);
@@ -54,4 +56,3 @@ void ArbreBinaireRecherche<Type>::insererNoeude(Noeud<Type> noeud, Type valeur) 
   }
 }
 
-#endif
