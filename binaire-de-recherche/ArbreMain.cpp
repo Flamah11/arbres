@@ -4,9 +4,24 @@
 int main() {
   ArbreBinaireRecherche<int>* arbre = new ArbreBinaireRecherche<int>();
 
-  arbre->inserer(30);
-  arbre->inserer(40);
-  arbre->inserer(20);
+  arbre->inserer(8);
+  arbre->inserer(5);
+  arbre->inserer(3);
+  arbre->inserer(7);
+  arbre->inserer(9);
+
+  arbre->prefixe();
+
+  ArbreBinaireRecherche<int>* arbre2 = new ArbreBinaireRecherche<int>();
+  arbre2->inserer(31);
+  arbre2->inserer(10);
+  arbre2->inserer(60);
+  arbre2->inserer(47);
+  arbre2->inserer(3);
+  arbre2->inserer(15);
+  arbre2->inserer(17);
+
+  arbre2->postfixe();
 
   return 0;
 }
