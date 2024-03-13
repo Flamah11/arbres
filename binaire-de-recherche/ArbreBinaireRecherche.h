@@ -24,6 +24,15 @@ class ArbreBinaireRecherche {
     void postfixe();
     void postfixeNoeud(Noeud<Type>* noeud);
 
+    Noeud<Type>* minimum();
+    Noeud<Type>* noeudMinimum(Noeud<Type>* noeud);
+
+    Noeud<Type>* maximum();
+    Noeud<Type>* noeudMaximum(Noeud<Type>* noeud);
+
+    Noeud<Type>* trouver(Type cle);
+    Noeud<Type>* trouverNoeud(Noeud<Type>* noeud, Type cle);
+
 };
 
 #endif
@@ -111,4 +120,51 @@ void ArbreBinaireRecherche<Type>::infixeNoeud(Noeud<Type>* noeud) {
     cout << noeud->cle << " ";
     infixeNoeud(noeud->filsDroite);
   }
+}
+
+template <typename Type>
+Noeud<Type>* ArbreBinaireRecherche<Type>::minimum() {
+  return noeudMinimum(this->racine);
+}
+
+template <typename Type>
+Noeud<Type>* ArbreBinaireRecherche<Type>::noeudMinimum(Noeud<Type>* noeud) {
+  while (noeud != nullptr && noeud->aFilsGauche()) {
+    noeud = noeud->filsGauche;
+  }
+
+  return noeud;
+}
+
+template <typename Type>
+Noeud<Type>* ArbreBinaireRecherche<Type>::maximum() {
+  return noeudMaximum(this->racine);
+}
+
+template <typename Type>
+Noeud<Type>* ArbreBinaireRecherche<Type>::noeudMaximum(Noeud<Type>* noeud) {
+  while (noeud != nullptr && noeud->aFilsDroite()) {
+    noeud = noeud->filsDroite;
+  }
+
+  return noeud;
+}
+template <typename Type>
+Noeud<Type>* ArbreBinaireRecherche<Type>::trouver(Type cle) {
+  return trouverNoeud(this->racine);
+}
+
+template <typename Type>
+Noeud<Type>* ArbreBinaireRecherche<Type>::trouverNoeud(Noeud<Type>* noeud, Type cle) {
+  if (noeud != nullptr) {
+    if (cle > noeud->cle) {
+      return trouverNoeud(noeud->filsDroite, cle);
+    }
+
+    if (cle < noeud->cle) {
+      return trouverNoeud(noeud->filsGauche, cle);
+    } 
+    return noeud;
+  }
+  return noeud;
 }

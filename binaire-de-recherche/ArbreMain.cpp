@@ -23,5 +23,13 @@ int main() {
 
   arbre2->postfixe();
 
+  Noeud<int>* minimum = arbre2->minimum();
+
+  cout << "Le minimum d'arbre2 est : " << minimum->cle << endl;
+
+  Noeud<int>* maximum = arbre2->maximum();
+
+  cout << "Le maximum d'arbre2 est : " << maximum->cle << endl;
+
   return 0;
 }
