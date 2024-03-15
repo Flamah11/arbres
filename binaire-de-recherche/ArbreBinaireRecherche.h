@@ -33,6 +33,8 @@ class ArbreBinaireRecherche {
     Noeud<Type>* trouver(Type cle);
     Noeud<Type>* trouverNoeud(Noeud<Type>* noeud, Type cle);
 
+    void supprimer(Type cle);
+
 };
 
 #endif
@@ -109,8 +111,13 @@ void ArbreBinaireRecherche<Type>::postfixeNoeud(Noeud<Type>* noeud) {
 
 template <typename Type>
 void ArbreBinaireRecherche<Type>::infixe() {
+  if(!this->estVide()) {
     infixeNoeud(this->racine);
     cout << endl;
+  } else {
+    cout << "L'arbre est vide" << endl;
+  }
+
 }
 
 template <typename Type>
@@ -151,20 +158,77 @@ Noeud<Type>* ArbreBinaireRecherche<Type>::noeudMaximum(Noeud<Type>* noeud) {
 }
 template <typename Type>
 Noeud<Type>* ArbreBinaireRecherche<Type>::trouver(Type cle) {
-  return trouverNoeud(this->racine);
+  return trouverNoeud(this->racine, cle);
 }
 
 template <typename Type>
 Noeud<Type>* ArbreBinaireRecherche<Type>::trouverNoeud(Noeud<Type>* noeud, Type cle) {
-  if (noeud != nullptr) {
-    if (cle > noeud->cle) {
-      return trouverNoeud(noeud->filsDroite, cle);
-    }
-
-    if (cle < noeud->cle) {
-      return trouverNoeud(noeud->filsGauche, cle);
-    } 
-    return noeud;
+  if (noeud == nullptr)
+    return nullptr;
+  
+  if (cle > noeud->cle) {
+    return trouverNoeud(noeud->filsDroite, cle);
   }
+
+  if (cle < noeud->cle) {
+    return trouverNoeud(noeud->filsGauche, cle);
+  } 
   return noeud;
+
+}
+
+template <typename Type>
+void ArbreBinaireRecherche<Type>::supprimer(Type cle) {
+  Noeud<Type>* noeudASupprimer = trouver(cle);
+
+  if (noeudASupprimer != nullptr) {
+    if (noeudASupprimer->estFeuille()) {
+      if (noeudASupprimer->estRacine()) {
+        this->racine = nullptr;
+      } else {
+        if (noeudASupprimer->estFilsGauche()) {
+          noeudASupprimer->parent->filsGauche = nullptr;
+        } else {
+          noeudASupprimer->parent->filsDroite = nullptr;
+        }
+      }
+      delete noeudASupprimer;
+    } else if (noeudASupprimer->aDeuxEnfants()) {
+
+      Noeud<Type>* successeur = noeudMinimum(noeudASupprimer->filsDroite);
+      Type cleSuccesseur = successeur->cle;
+      supprimer(cleSuccesseur);
+      noeudASupprimer->cle = cleSuccesseur;
+
+    } else { // le noeud n'a qu'un enfant
+      if (noeudASupprimer->estRacine()) {
+        if (noeudASupprimer->aFilsGauche()) {
+          noeudASupprimer->filsGauche->parent = nullptr;
+          this->racine = noeudASupprimer->filsGauche;
+        } else {
+          noeudASupprimer->filsDroite->parent = nullptr;
+          this->racine = noeudASupprimer->filsDroite;
+        }
+      } else {
+        if (noeudASupprimer->estFilsGauche()) {
+          if (noeudASupprimer->aFilsGauche()) {
+            noeudASupprimer->parent->filsGauche = noeudASupprimer->filsGauche;
+            noeudASupprimer->filsGauche->parent = noeudASupprimer->parent;
+          } else {
+            noeudASupprimer->parent->filsGauche = noeudASupprimer->filsDroite;
+            noeudASupprimer->filsDroite->parent = noeudASupprimer->parent;
+          }
+        } else {
+          if (noeudASupprimer->aFilsGauche()) {
+            noeudASupprimer->parent->filsDroite = noeudASupprimer->filsGauche;
+            noeudASupprimer->filsGauche->parent = noeudASupprimer->parent;
+          } else {
+            noeudASupprimer->parent->filsDroite = noeudASupprimer->filsDroite;
+            noeudASupprimer->filsDroite->parent = noeudASupprimer->parent;
+          }
+        }
+      }
+      delete noeudASupprimer;
+    }
+  }
 }

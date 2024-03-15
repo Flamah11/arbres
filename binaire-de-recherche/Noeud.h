@@ -20,6 +20,7 @@ class Noeud {
     bool aFilsDroite();
     bool estFilsGauche();
     bool estFilsDroite();
+    bool aDeuxEnfants();
 };
 
 template <typename Type>
@@ -76,4 +77,9 @@ bool Noeud<Type>::estFilsDroite() {
   } else {
     return this->parent->filsDroite == this;
   }
+}
+
+template <typename Type>
+bool Noeud<Type>::aDeuxEnfants() {
+  return (this->filsDroite != nullptr && this->filsGauche != nullptr);
 }

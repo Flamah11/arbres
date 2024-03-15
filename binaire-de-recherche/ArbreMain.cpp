@@ -31,5 +31,8 @@ int main() {
 
   cout << "Le maximum d'arbre2 est : " << maximum->cle << endl;
 
+  Noeud<int>* noeudRecherche = arbre2->trouver(47);
+
+  cout << "La  valeur : " << noeudRecherche->cle << "est presente.";
   return 0;
 }
