@@ -33,6 +33,11 @@ class ArbreBinaireRecherche {
     Noeud<Type>* trouver(Type cle);
     Noeud<Type>* trouverNoeud(Noeud<Type>* noeud, Type cle);
 
+    int hauteur();
+    int hauteurNoeud(Noeud<Type>* noeud);
+
+    int profondeur(Noeud<Type>* noeud);
+
     void supprimer(Type cle);
 
 };
@@ -231,4 +236,36 @@ void ArbreBinaireRecherche<Type>::supprimer(Type cle) {
       delete noeudASupprimer;
     }
   }
+}
+
+template <typename Type>
+int ArbreBinaireRecherche<Type>::hauteur() {
+   return hauteurNoeud(this->racine);
+}
+
+
+template <typename Type>
+int ArbreBinaireRecherche<Type>::hauteurNoeud(Noeud<Type>* noeud) {
+   if (noeud == nullptr) {
+       return -1; // L'hauteur d'arbre vide est -1
+   } else {
+       int hauteurGauche = hauteurNoeud(noeud->filsGauche);
+       int hauteurDroite = hauteurNoeud(noeud->filsDroite);
+       return 1 + max(hauteurGauche, hauteurDroite);
+   }
+}
+
+template <typename Type>
+int ArbreBinaireRecherche<Type>::profondeur(Noeud<Type>* noeud) {
+   int profondeur = 0;
+   Noeud<Type>* noeudActuel = this->racine;
+   while (noeudActuel != nullptr && noeudActuel->cle != noeud->cle) {
+       profondeur++;
+       if (noeud->cle < noeudActuel->cle) {
+           noeudActuel = noeudActuel->filsGauche;
+       } else {
+           noeudActuel = noeudActuel->filsDroite;
+       }
+   }
+   return noeudActuel == nullptr ? -1 : profondeur;
 }
