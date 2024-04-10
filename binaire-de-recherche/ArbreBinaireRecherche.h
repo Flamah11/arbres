@@ -12,32 +12,24 @@ class ArbreBinaireRecherche {
 
     ArbreBinaireRecherche();
     bool estVide();
+    
     void inserer(Type valeur);
-    void insererNoeud(Noeud<Type>* noeud, Type valeur);
-
+ 
     void prefixe();
-    void prefixeNoeud(Noeud<Type>* noeud);
+ 
 
     void infixe();
-    void infixeNoeud(Noeud<Type>* noeud);
-
+    
     void postfixe();
-    void postfixeNoeud(Noeud<Type>* noeud);
 
     Noeud<Type>* minimum();
-    Noeud<Type>* noeudMinimum(Noeud<Type>* noeud);
 
     Noeud<Type>* maximum();
-    Noeud<Type>* noeudMaximum(Noeud<Type>* noeud);
-
+    
     Noeud<Type>* trouver(Type cle);
-    Noeud<Type>* trouverNoeud(Noeud<Type>* noeud, Type cle);
 
     int hauteur();
-    int hauteurNoeud(Noeud<Type>* noeud);
-
-    int profondeur(Noeud<Type>* noeud);
-
+    
     void supprimer(Type cle);
 
 };
@@ -59,127 +51,52 @@ void ArbreBinaireRecherche<Type>::inserer(Type valeur) {
   if (this->estVide()) {
     this->racine = new Noeud<Type>(valeur);
   } else {
-    insererNoeud(this->racine, valeur);
+    racine->insererNoeud(this->racine, valeur);
   }
 }
 
-template <typename Type>
-void ArbreBinaireRecherche<Type>::insererNoeud(Noeud<Type>* noeud, Type valeur) {
-  if (valeur < noeud->cle) {
-    if (noeud->aFilsGauche()) {      
-      insererNoeud(noeud->filsGauche, valeur);
-
-    } else {
-      noeud->filsGauche = new Noeud<Type>(valeur);
-      noeud->filsGauche->parent = noeud;
-    }
-  } else {
-    if (noeud->aFilsDroite()) {
-      insererNoeud(noeud->filsDroite, valeur);
-
-    } else {
-      noeud->filsDroite = new Noeud<Type>(valeur);
-      noeud->filsDroite->parent = noeud;
-    }
-  }
-}
 
 template <typename Type>
 void ArbreBinaireRecherche<Type>::prefixe() {
-    prefixeNoeud(this->racine);
+    racine->Noeud<Type>::prefixeNoeud(this->racine);
     cout << endl;
 }
 
-template <typename Type>
-void ArbreBinaireRecherche<Type>::prefixeNoeud(Noeud<Type>* noeud) {
-  if(noeud != nullptr) {
-    cout << noeud->cle << " ";
-    prefixeNoeud(noeud->filsGauche);
-    prefixeNoeud(noeud->filsDroite);
-  }
-}
+
 
 template <typename Type>
 void ArbreBinaireRecherche<Type>::postfixe() {
-    postfixeNoeud(this->racine);
+    this->racine->Noeud<Type>::postfixeNoeud(this->racine);
     cout << endl;
-}
-
-template <typename Type>
-void ArbreBinaireRecherche<Type>::postfixeNoeud(Noeud<Type>* noeud) {
-  if(noeud != nullptr) {
-    postfixeNoeud(noeud->filsGauche);
-    postfixeNoeud(noeud->filsDroite);
-    cout << noeud->cle << " ";
-  }
 }
 
 template <typename Type>
 void ArbreBinaireRecherche<Type>::infixe() {
   if(!this->estVide()) {
-    infixeNoeud(this->racine);
-    cout << endl;
-  } else {
+    std::cout <<  "Arbre actuel en ordre infixe : ";
+    this->racine->Noeud<Type>::infixeNoeud(this->racine);
+    cout << endl;} 
+    else {
     cout << "L'arbre est vide" << endl;
   }
 
 }
 
 template <typename Type>
-void ArbreBinaireRecherche<Type>::infixeNoeud(Noeud<Type>* noeud) {
-  if(noeud != nullptr) {
-    infixeNoeud(noeud->filsGauche);
-    cout << noeud->cle << " ";
-    infixeNoeud(noeud->filsDroite);
-  }
-}
-
-template <typename Type>
 Noeud<Type>* ArbreBinaireRecherche<Type>::minimum() {
-  return noeudMinimum(this->racine);
+  return racine->Noeud<Type>::noeudMinimum(this->racine);
 }
 
-template <typename Type>
-Noeud<Type>* ArbreBinaireRecherche<Type>::noeudMinimum(Noeud<Type>* noeud) {
-  while (noeud != nullptr && noeud->aFilsGauche()) {
-    noeud = noeud->filsGauche;
-  }
 
-  return noeud;
-}
 
 template <typename Type>
 Noeud<Type>* ArbreBinaireRecherche<Type>::maximum() {
-  return noeudMaximum(this->racine);
+  return racine->Noeud<Type>::noeudMaximum(this->racine);
 }
 
-template <typename Type>
-Noeud<Type>* ArbreBinaireRecherche<Type>::noeudMaximum(Noeud<Type>* noeud) {
-  while (noeud != nullptr && noeud->aFilsDroite()) {
-    noeud = noeud->filsDroite;
-  }
-
-  return noeud;
-}
 template <typename Type>
 Noeud<Type>* ArbreBinaireRecherche<Type>::trouver(Type cle) {
-  return trouverNoeud(this->racine, cle);
-}
-
-template <typename Type>
-Noeud<Type>* ArbreBinaireRecherche<Type>::trouverNoeud(Noeud<Type>* noeud, Type cle) {
-  if (noeud == nullptr)
-    return nullptr;
-  
-  if (cle > noeud->cle) {
-    return trouverNoeud(noeud->filsDroite, cle);
-  }
-
-  if (cle < noeud->cle) {
-    return trouverNoeud(noeud->filsGauche, cle);
-  } 
-  return noeud;
-
+  return racine->Noeud<Type>::trouverNoeud(this->racine, cle);
 }
 
 template <typename Type>
@@ -200,7 +117,7 @@ void ArbreBinaireRecherche<Type>::supprimer(Type cle) {
       delete noeudASupprimer;
     } else if (noeudASupprimer->aDeuxEnfants()) {
 
-      Noeud<Type>* successeur = noeudMinimum(noeudASupprimer->filsDroite);
+      Noeud<Type>* successeur = racine->Noeud<Type>::noeudMinimum(noeudASupprimer->filsDroite);
       Type cleSuccesseur = successeur->cle;
       supprimer(cleSuccesseur);
       noeudASupprimer->cle = cleSuccesseur;
@@ -240,32 +157,69 @@ void ArbreBinaireRecherche<Type>::supprimer(Type cle) {
 
 template <typename Type>
 int ArbreBinaireRecherche<Type>::hauteur() {
-   return hauteurNoeud(this->racine);
+   return this->racine->hauteurNoeud(this->racine);
 }
 
+/*
+Voici un exemple d'utilisation d'une file pour parcourir l'arbre en largeur : 
+	Ordre d'insertion : (0, 30, 20, 25, 10, 50, 40, 60, 5, 2, 11, 26, 1);
+        
+                 00
+                   \
+                    30
+               /         \
+              20          50
+           /     \       /   \
+         10       25    40    60
+        /  \     /   \    \     
+       5   11        26    51    
+      /					            \
+     2                       52
+    /                         \
+   1                           53
 
-template <typename Type>
-int ArbreBinaireRecherche<Type>::hauteurNoeud(Noeud<Type>* noeud) {
-   if (noeud == nullptr) {
-       return -1; // L'hauteur d'arbre vide est -1
-   } else {
-       int hauteurGauche = hauteurNoeud(noeud->filsGauche);
-       int hauteurDroite = hauteurNoeud(noeud->filsDroite);
-       return 1 + max(hauteurGauche, hauteurDroite);
-   }
-}
+   Voici les étapes dans la file :
 
-template <typename Type>
-int ArbreBinaireRecherche<Type>::profondeur(Noeud<Type>* noeud) {
-   int profondeur = 0;
-   Noeud<Type>* noeudActuel = this->racine;
-   while (noeudActuel != nullptr && noeudActuel->cle != noeud->cle) {
-       profondeur++;
-       if (noeud->cle < noeudActuel->cle) {
-           noeudActuel = noeudActuel->filsGauche;
-       } else {
-           noeudActuel = noeudActuel->filsDroite;
-       }
-   }
-   return noeudActuel == nullptr ? -1 : profondeur;
-}
+   Affiche rien
+   etape #1 (0) 
+
+  ()
+   affiche zéro et le retire, ajoute 30
+   etape #2 (30)
+
+  ()
+   affiche 30 et le retire, ajoute 20 et 50
+   etape #3 (20, 50)
+
+  (50)
+   affiche 20 et le retire, ajoute 10 et 25
+   etape #4 (50, 10, 25)
+
+  (10, 25)  
+   affiche 50 et le retire, ajoute 5 et 11 
+   etape #5 (10, 25, 5, 11)
+
+   (25, 5, 11)
+   affiche 10 et le retire, ajoute 26 
+   etape #6 (25, 5, 11, 26)
+
+
+   affiche 25 et le retire, ajoute 2
+   etape #7 (5, 11, 26, 2)
+
+
+   affiche 5 et le retire, ajoute rien
+   etape 8 (11, 26, 2)
+   etc...
+
+  affiche 11, ajoute rien, tu le retire 
+  etape 9 (26, 2)
+
+  affiche 26, ajoute rien, tu le retire
+  etape 10 (2)
+
+  
+*/
+
+
+
