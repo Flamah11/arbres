@@ -112,6 +112,11 @@ int main() {
 
   arbre->supprimer(25);
   arbre->infixe();
+
+  cout << " neyou" << endl;
   
+  noeud1->parcoursEnLargeur(arbre50->racine);
+
+  cout << " neyou" << endl;
   return 0;
 }
