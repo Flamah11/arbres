@@ -49,6 +49,7 @@ class Noeud {
     int hauteurNoeud(Noeud<Type>* noeud);
 
     int profondeur(Noeud<Type>* noeud);
+    
 };
 
 
@@ -162,122 +163,60 @@ void Noeud<Type>::parcoursEnLargeur(Noeud<Type>* racine, bool infoBonus) {
     else 
         cout << representationSimple;
 }*/
-
 template <typename Type>
 void Noeud<Type>::parcoursEnLargeur(Noeud<Type>* noeud) {
-   if (noeud == nullptr) return;
+    if (noeud == nullptr) return;
     std::queue<Noeud<Type>*> file;
     file.push(noeud);
-    string vuebasique = "", vuebonus = ""; 
+    std::string vueBasique = "", vueBonus = ""; 
     int niveauActuel = 0, profondeurNoeud = 0;
     while (!file.empty()) {
         Noeud<Type>* noeudCourant = file.front();
         file.pop();
-        profondeurNoeud = this->profondeur(niveauActuel);
-    // Vérifier si nous sommes passés au niveau supérieur de l'arbre
-    if (profondeurNoeud == 0) {
-        vuebasique += "Vue simplifiée de l'arbre en parcours largeur : ";
-        vuebonus += "Vue détaillée de l'arbre en parcours largeur avec infos supplémentaires : ";
-        vuebonus += " Niveau " + to_string(profondeurNoeud) + " : "; 
-    } else if (profondeurNoeud > niveauActuel) {
-        vuebonus += "  Niveau " + to_string(profondeurNoeud) + " : "; 
-        // Mise à jour du niveau actuel au niveau du noeud
-        niveauActuel = profondeurNoeud;
-    }
-    // Construction de l'affichage des informations du noeud
-    vueBasique += "  [Clé : " + to_string(noeudActuel->clef_) + ", Hauteur : " + to_string(noeudActuel->hauteur()) + ", Profondeur : " + to_string(profondeurNoeud) + "]";
-   vuebasique += "  " + to_string(noeudActuel->clef_);
-    // Ajout des noeuds enfants à la file d'attente pour le traitement ultérieur
-    if (noeudActuel->filsGauche_ != nullptr) 
-        file.push(noeudActuel->filsGauche_);
-    if (noeudActuel->filsDroite_ != nullptr) 
-        file.push(noeudActuel->filsDroite_);
-}
-
-// Choix de l'affichage en fonction de l'option supplémentaire
-if (infoBonus)
-    cout << representationBonus;
-else 
-    cout << vuebasique;
-
-        std::cout << noeudCourant->cle << " ";
         if (noeudCourant->filsGauche != nullptr) file.push(noeudCourant->filsGauche);
         if (noeudCourant->filsDroite != nullptr) file.push(noeudCourant->filsDroite);
+
+        profondeurNoeud = this->profondeur(noeudCourant);
+        if (profondeurNoeud == 0) {
+            vueBasique += "Vue simplifiée de l'arbre en parcours largeur : ";
+            vueBonus += "Vue détaillée de l'arbre en parcours largeur avec infos supplémentaires : ";
+            vueBonus += " Niveau " + std::to_string(profondeurNoeud) + " : "; 
+        } else if (profondeurNoeud > niveauActuel) {
+            vueBonus += "  Niveau " + std::to_string(profondeurNoeud) + " : "; 
+            niveauActuel = profondeurNoeud;
+        }
+        vueBasique += "  [clé : " + std::to_string(noeudCourant->cle) + ", Hauteur : " + std::to_string(this->hauteurNoeud(noeudCourant)) + ", Profondeur : " + std::to_string(profondeurNoeud) + "]";
+        vueBasique += "  " + std::to_string(noeudCourant->cle) + " ";
     }
 
-// Exemples d'implémentations fictives pour hauteur et profondeur
-  
-template <typename Type>
-Noeud<Type>* Noeud<Type>::noeudMinimum(Noeud<Type>* noeud) {
-  while (noeud != nullptr && noeud->aFilsGauche()) {
-    noeud = noeud->filsGauche;
-  }
-
-  return noeud;
-}
-
-template <typename Type>
-Noeud<Type>* Noeud<Type>::noeudMaximum(Noeud<Type>* noeud) {
-  while (noeud != nullptr && noeud->aFilsDroite()) {
-    noeud = noeud->filsDroite;
-  }
-
-  return noeud;
-}
-
-
-template <typename Type>
-Noeud<Type>* Noeud<Type>::trouverNoeud(Noeud<Type>* noeud, Type cle) {
-  if (noeud == nullptr)
-    return nullptr;
-  
-  if (cle > noeud->cle) {
-    return trouverNoeud(noeud->filsDroite, cle);
-  }
-
-  if (cle < noeud->cle) {
-    return trouverNoeud(noeud->filsGauche, cle);
-  } 
-  return noeud;
-
-}
-
-//déclaration de la methode "hauteurNoeud" de la classe "Noeud" :
-//int hauteurNoeud(Noeud<Type>* noeud);
-
-//Définition de la methode "hauteurNoeud" de la classe "Noeud" :
-//Méthode qui donne la distance maximal entre le noeud actuel et une feuille.
-//Les feuilles ont une hauteur de "zéro" pour le calcul.
-//La hauteur de la racine équivaut toujours à  la hauteur maximal de l'arbre entier.
-template<class Type>
-int Noeud<Type>::hauteurNoeud(Noeud<Type>* noeud) {
-   if (noeud == nullptr) {
-       return -1; // L'hauteur d'arbre vide est -1
-   } else {
-       int hauteurGauche = hauteurNoeud(noeud->filsGauche);
-       int hauteurDroite = hauteurNoeud(noeud->filsDroite);
-       return 1 + max(hauteurGauche, hauteurDroite);
-   }
+    // Choix de l'affichage en fonction de l'option supplémentaire
+    bool infoBonus = true; // ou déterminé par une condition externe
+    if (infoBonus)
+        std::cout << vueBonus;
+    else 
+        std::cout << vueBasique;
 }
 
 //Méthode qui donne la distance entre la racine et le noeud actuel.
 //Le noeud en argument a une profondeur de zéro pour le calcul.
 //Si le noeud en argument est la racine, alors la racine vaut zéro.
-template <typename Type>
+// Définition de la méthode profondeur à l'extérieur de la classe mais toujours dans le fichier d'en-tête
+template<typename Type>
 int Noeud<Type>::profondeur(Noeud<Type>* noeud) {
-   int profondeur = 0;
-   Noeud<Type>* noeudActuel = this->racine;
-   while (noeudActuel != nullptr && noeudActuel->cle != noeud->cle) {
-       profondeur++;
-       if (noeud->cle < noeudActuel->cle) {
-           noeudActuel = noeudActuel->filsGauche;
-       } else {
-           noeudActuel = noeudActuel->filsDroite;
-       }
-   }
-   return noeudActuel == nullptr ? -1 : profondeur;
-}
+    int profondeur = 0;
+    Noeud<Type>* noeudActuel = this;  // Correct, on suppose que 'this' est le noeud racine
 
+    while (noeudActuel != nullptr && noeudActuel->cle != noeud->cle) {
+        profondeur++;
+        if (noeud->cle < noeudActuel->cle) {
+            noeudActuel = noeudActuel->filsGauche;
+        } else {
+            noeudActuel = noeudActuel->filsDroite;
+        }
+    }
+
+    return noeudActuel == nullptr ? -1 : profondeur;
+}
 
 template <typename Type>
 bool Noeud<Type>::estRacine() {

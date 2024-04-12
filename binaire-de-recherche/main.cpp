@@ -67,7 +67,7 @@ int main() {
   cout << "La  valeur : " << noeudRecherche->cle << " est presente.";
 
 
-  
+ /* 
 
 
 
@@ -117,6 +117,6 @@ int main() {
   
   noeud1->parcoursEnLargeur(arbre50->racine);
 
-  cout << " neyou" << endl;
+  cout << " neyou" << endl;*/
   return 0;
 }
